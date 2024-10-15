@@ -38,7 +38,7 @@ class CategoryListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Categories'),
+        title: Text('インベントリアプリ'),
       ),
       body: Column(
         children: [
@@ -46,7 +46,7 @@ class CategoryListScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _categoryController,
-              decoration: InputDecoration(labelText: 'Add Category'),
+              decoration: InputDecoration(labelText: 'カテゴリーを追加しよう！'),
             ),
           ),
           ElevatedButton(
@@ -57,7 +57,7 @@ class CategoryListScreen extends StatelessWidget {
                 _categoryController.clear();
               }
             },
-            child: Text('Add Category'),
+            child: Text('カテゴリーを追加'),
           ),
           Expanded(
             child: Consumer<CategoryProvider>(

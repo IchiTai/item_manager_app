@@ -14,7 +14,7 @@ class CategoryItemsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Items in $category'),
+        title: Text('$categoryのアイテム'),
       ),
       body: Column(
         children: [
@@ -22,14 +22,14 @@ class CategoryItemsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _itemNameController,
-              decoration: InputDecoration(labelText: 'Item Name'),
+              decoration: InputDecoration(labelText: 'アイテムの名前'),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _quantityController,
-              decoration: InputDecoration(labelText: 'Quantity'),
+              decoration: InputDecoration(labelText: 'アイテムの数'),
               keyboardType: TextInputType.number,
             ),
           ),
