@@ -4,15 +4,22 @@ import 'category_provider.dart';
 import 'item_model.dart';
 import 'category_items_screen.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final categoryProvider = CategoryProvider();
+  await categoryProvider.loadCategories();
+  runApp(MyApp(provider: categoryProvider));
 }
 
 class MyApp extends StatelessWidget {
+  final CategoryProvider provider;
+
+  MyApp({required this.provider});
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CategoryProvider(),
+    return ChangeNotifierProvider<CategoryProvider>.value(
+      value: provider,
       child: MaterialApp(
         title: 'Item Management App',
         theme: ThemeData(
