@@ -61,6 +61,21 @@ class CategoryProvider with ChangeNotifier {
   notifyListeners();
 }
 
+void reorderItem(String category, int oldIndex, int newIndex) {
+  if (_categories.containsKey(category)) {
+    final items = _categories[category];
+    if (items != null) {
+      // アイテムの順序を変更
+      final item = items.removeAt(oldIndex);
+      items.insert(newIndex, item);
+
+      // カテゴリーのデータを保存
+      saveCategories();
+      notifyListeners();
+    }
+  }
+}
+
   void addCategory(String category) {
     if (!_categories.containsKey(category)) {
       _categories[category] = [];

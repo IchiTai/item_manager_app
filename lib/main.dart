@@ -64,9 +64,7 @@ class CategoryListScreen extends StatelessWidget {
               builder: (context, provider, child) {
                 return ReorderableListView(
                   onReorder: (int oldIndex, int newIndex) {
-                    if (newIndex > oldIndex) {
-                      newIndex -= 1;
-                    }
+                    
                     provider.reorderCategory(oldIndex, newIndex);
                   },
                   children: List.generate(provider.categoryOrder.length, (index) {
