@@ -41,7 +41,8 @@ class CategoryItemsScreen extends StatelessWidget {
                 context
                     .read<CategoryProvider>()
                     .addItem(category, itemName, quantity);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('アイテムに「$itemName」が追加されました！')));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('アイテムに「$itemName」が追加されました！')));
                 _itemNameController.clear();
                 _quantityController.clear();
               }
@@ -86,7 +87,36 @@ class CategoryItemsScreen extends StatelessWidget {
                           IconButton(
                             icon: Icon(Icons.delete),
                             onPressed: () {
-                              provider.removeItem(category, item.name);
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('削除確認'),
+                                    content: Text('このアイテムを削除してもよろしいですか？'),
+                                    actions: [
+                                      TextButton(
+                                        child: Text('キャンセル'),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // ダイアログを閉じる
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text('削除'),
+                                        onPressed: () {
+                                          // アイテム削除を実行
+                                          context
+                                              .read<CategoryProvider>()
+                                              .removeItem(
+                                                  category, items[index].name);
+                                          Navigator.of(context)
+                                              .pop(); // ダイアログを閉じる
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                           ),
                         ],

@@ -54,7 +54,8 @@ class CategoryListScreen extends StatelessWidget {
               final category = _categoryController.text;
               if (category.isNotEmpty) {
                 context.read<CategoryProvider>().addCategory(category);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('カテゴリーに「$category」が追加されました！')));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('カテゴリーに「$category」が追加されました！')));
                 _categoryController.clear();
               }
             },
@@ -65,10 +66,10 @@ class CategoryListScreen extends StatelessWidget {
               builder: (context, provider, child) {
                 return ReorderableListView(
                   onReorder: (int oldIndex, int newIndex) {
-                    
                     provider.reorderCategory(oldIndex, newIndex);
                   },
-                  children: List.generate(provider.categoryOrder.length, (index) {
+                  children:
+                      List.generate(provider.categoryOrder.length, (index) {
                     final category = provider.categoryOrder[index];
                     return ListTile(
                       key: ValueKey(category),
@@ -76,14 +77,43 @@ class CategoryListScreen extends StatelessWidget {
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          context.read<CategoryProvider>().removeCategory(category);
+                          // 削除確認ダイアログを表示
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('削除確認'),
+                                content:
+                                    Text('カテゴリー "$category" を削除してもよろしいですか？'),
+                                actions: [
+                                  TextButton(
+                                    child: Text('キャンセル'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // ダイアログを閉じる
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('削除'),
+                                    onPressed: () {
+                                      // カテゴリー削除を実行
+                                      context
+                                          .read<CategoryProvider>()
+                                          .removeCategory(category);
+                                      Navigator.of(context).pop(); // ダイアログを閉じる
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                       ),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CategoryItemsScreen(category: category),
+                            builder: (context) =>
+                                CategoryItemsScreen(category: category),
                           ),
                         );
                       },
