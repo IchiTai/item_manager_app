@@ -62,31 +62,34 @@ class CategoryListScreen extends StatelessWidget {
           Expanded(
             child: Consumer<CategoryProvider>(
               builder: (context, provider, child) {
-                return ListView.builder(
-                  itemCount: provider.categories.keys.length,
-                  itemBuilder: (context, index) {
-                    final category = provider.categories.keys.elementAt(index);
+                return ReorderableListView(
+                  onReorder: (int oldIndex, int newIndex) {
+                    if (newIndex > oldIndex) {
+                      newIndex -= 1;
+                    }
+                    provider.reorderCategory(oldIndex, newIndex);
+                  },
+                  children: List.generate(provider.categoryOrder.length, (index) {
+                    final category = provider.categoryOrder[index];
                     return ListTile(
+                      key: ValueKey(category),
                       title: Text(category),
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          context
-                              .read<CategoryProvider>()
-                              .removeCategory(category);
+                          context.read<CategoryProvider>().removeCategory(category);
                         },
                       ),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                CategoryItemsScreen(category: category),
+                            builder: (context) => CategoryItemsScreen(category: category),
                           ),
                         );
                       },
                     );
-                  },
+                  }),
                 );
               },
             ),
