@@ -54,6 +54,7 @@ class CategoryListScreen extends StatelessWidget {
               final category = _categoryController.text;
               if (category.isNotEmpty) {
                 context.read<CategoryProvider>().addCategory(category);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('カテゴリーに「$category」が追加されました！')));
                 _categoryController.clear();
               }
             },

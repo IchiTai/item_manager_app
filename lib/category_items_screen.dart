@@ -41,6 +41,7 @@ class CategoryItemsScreen extends StatelessWidget {
                 context
                     .read<CategoryProvider>()
                     .addItem(category, itemName, quantity);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('アイテムに「$itemName」が追加されました！')));
                 _itemNameController.clear();
                 _quantityController.clear();
               }
