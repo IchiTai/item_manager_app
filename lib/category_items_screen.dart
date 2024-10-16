@@ -45,57 +45,53 @@ class CategoryItemsScreen extends StatelessWidget {
                 _quantityController.clear();
               }
             },
-            child: Text('Add Item'),
+            child: Text('アイテムを追加'),
           ),
           Expanded(
             child: Consumer<CategoryProvider>(
               builder: (context, provider, child) {
                 final items = provider.categories[category] ?? [];
-                return ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
+                return ReorderableListView(
+                  onReorder: (int oldIndex, int newIndex) {
+                    if (newIndex > oldIndex) {
+                      newIndex -= 1;
+                    }
+                    provider.reorderItem(category, oldIndex, newIndex);
+                  },
+                  children: List.generate(items.length, (index) {
+                    final item = items[index];
                     return ListTile(
-                      title: Text(
-                          '${items[index].name} - ${items[index].quantity}'),
+                      key: ValueKey(item),
+                      title: Text('${item.name} - ${item.quantity}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
                             icon: Icon(Icons.remove),
                             onPressed: () {
-                              if (items[index].quantity > 0) {
-                                context
-                                    .read<CategoryProvider>()
-                                    .updateItemQuantity(
-                                        category,
-                                        items[index].name,
-                                        items[index].quantity - 1);
+                              if (item.quantity > 0) {
+                                provider.updateItemQuantity(
+                                    category, item.name, item.quantity - 1);
                               }
                             },
                           ),
                           IconButton(
                             icon: Icon(Icons.add),
                             onPressed: () {
-                              context
-                                  .read<CategoryProvider>()
-                                  .updateItemQuantity(
-                                      category,
-                                      items[index].name,
-                                      items[index].quantity + 1);
+                              provider.updateItemQuantity(
+                                  category, item.name, item.quantity + 1);
                             },
                           ),
                           IconButton(
                             icon: Icon(Icons.delete),
                             onPressed: () {
-                              context
-                                  .read<CategoryProvider>()
-                                  .removeItem(category, items[index].name);
+                              provider.removeItem(category, item.name);
                             },
                           ),
                         ],
                       ),
                     );
-                  },
+                  }),
                 );
               },
             ),
